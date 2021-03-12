@@ -1,0 +1,36 @@
+﻿@inject ICatalogo service
+
+
+<MudDialog>
+    <DialogContent>
+        
+        <MudCard>
+            <MudCardMedia Image="@catalogo.foto"></MudCardMedia>
+        </MudCard>
+        
+    </DialogContent>
+    <DialogActions>
+        <MudButton Variant="Variant.Outlined" StartIcon="cancel" Color="Color.Warning" @onclick="close">Cancelar</MudButton>
+    </DialogActions>
+</MudDialog>
+
+
+
+@code {
+
+        [CascadingParameter]
+        public MudDialogInstance diag { get; set; }
+        [Parameter]
+        public string id { get; set; }
+        Catalogo catalogo = new Catalogo();
+        //IEnumerable<Catalogo> catalogos = new List<Catalogo>();
+
+
+        void close() => diag.Cancel();
+
+    protected override async Task OnInitializedAsync()
+    {
+
+            catalogo = await service.getOne(id); 
+    }
+}

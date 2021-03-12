@@ -1,0 +1,57 @@
+﻿
+@page "/catalogo/create"
+@inject ICatalogo service
+@inject NavigationManager nav
+
+
+
+<MudCard Class="mud-elevation-8" Elevation="8" Style="margin:0 auto;margin-top:1rem;width:65%">
+     <EditForm Model="@cat" OnValidSubmit="save">  
+    <MudCardHeader>
+        <MudText Typo="Typo.body1" Color="Color.Primary">Formulario de Catalogos</MudText>
+    </MudCardHeader>
+    <MudCardContent>
+        <MudTextField Style="margin-bottom:1rem;" @bind-Value="@cat.nombre" Label="Nombre" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+        <MudTextField Style="margin-bottom:1rem;" @bind-Value="@cat.marca" Label="Marca" Variant="Variant.Outlined" Margin="Margin.Dense"></MudTextField>
+        <MudBlazor.MudTextField Style="margin-bottom:1rem;" @bind-Value="@cat.edicion" Label="Año de Edicion" Variant="Variant.Outlined" Margin="Margin.Dense"></MudBlazor.MudTextField>
+        <MudSwitch Style="margin-bottom:1rem;" Label="Activo" @bind-Checked="@cat.activa" Color="Color.Primary"></MudSwitch>
+        <div class="row" style="margin-left:0px;">
+            <BlazorImages.Pages.ComponentesGenericos.ImagenesIn Label="Foto" imagenSeleccionada="imagenSeleccionada" foto="@imgUrl"/>
+        </div>
+    </MudCardContent>
+    <MudCardActions>
+       
+        <MudFab  Icon="@Icons.Material.Filled.Add" Color="Color.Secondary"></MudFab>
+    </MudCardActions>
+              </EditForm>
+        </MudCard>
+
+        @code {
+            private Catalogo cat = new Catalogo();
+            [Parameter]
+
+            public EventCallback OnValidSubmit { get; set; }
+            private string imgUrl;
+
+            protected override void OnInitialized()
+            {
+                if (!string.IsNullOrEmpty(cat.foto))
+                {
+                    imgUrl = cat.foto;
+                    cat.foto = null;
+
+                }
+            }
+            private async void save()
+            {
+                await service.save(cat);
+                nav.NavigateTo("/catalogo/index");
+            }
+
+            private void imagenSeleccionada(string img64)
+            {
+                cat.foto = img64;
+                imgUrl = null;
+            }
+
+        }

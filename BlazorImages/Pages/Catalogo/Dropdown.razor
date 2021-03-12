@@ -1,0 +1,46 @@
+﻿
+@page "/catalogo/dropdown"
+@inject ICatalogo services
+@using System.Linq.Dynamic.Core 
+
+
+<RadzenDropDownDataGrid AllowFiltering="true" FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" AllowClear="true" @bind-Value=@values
+                                Multiple="true" Placeholder="Buscar..." Data=@catalogos TextProperty="nombre" ValueProperty="Id">
+    <Columns>
+        <RadzenDropDownDataGridColumn Sortable="false">
+            <HeaderTemplate>
+                <RadzenCheckBox TriState="false" TValue="bool" Value="@(catalogos.Any(x => values != null && values.Contains(x.id)))"
+                                Change="@(args => values = args ? catalogos.Select(x => x.id) : values = Enumerable.Empty<string>())" />
+            </HeaderTemplate>
+            <Template Context="data">
+                <RadzenCheckBox TriState="false" Value="@(values != null && values.Contains(((Catalogo)data).id))" />
+            </Template>
+        </RadzenDropDownDataGridColumn>
+
+        <RadzenDropDownDataGridColumn Property="foto" Title="Foto" Width="200px">
+
+            <Template Context="data">
+                
+                    <RadzenImage Path="@data.foto" Style="max-height:140px;min-width:200px;"/>
+                
+            </Template>
+
+        </RadzenDropDownDataGridColumn>
+
+        <RadzenDropDownDataGridColumn Property="marca" Title="Marca" Width="150px"/>
+        <RadzenDropDownDataGridColumn Property="nombre" Title="Nombre" Width="150px"/>
+    </Columns>
+</RadzenDropDownDataGrid>
+
+
+@code {
+
+    IEnumerable<Catalogo> catalogos = new List<Catalogo>();
+
+    IEnumerable<string> values;
+
+    protected override async Task OnInitializedAsync()
+    {
+        catalogos = await services.getAll();
+    }
+}

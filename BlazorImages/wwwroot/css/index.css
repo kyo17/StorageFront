@@ -1,0 +1,27 @@
+﻿body {
+    background: #252728;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr 1fr;
+    grid-gap: 1rem;
+}
+
+.grid-item {
+    display:flex;
+    justify-content: center;
+    background-color: #7c8586;
+    color: #252728;
+    border-radius: 7px;
+    border-right: 5px solid white;
+    border-bottom: 8px solid #99a3a4;
+    padding: 20px;
+}
+
+.grid-item:hover {
+    cursor: pointer;
+    border-right: 2px solid white;
+    border-bottom: 2px solid #99a3a4;
+    transition: border 0.2s;
+}

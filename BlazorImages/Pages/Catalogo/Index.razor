@@ -1,0 +1,142 @@
+﻿
+@page "/catalogo/index"
+@inject ICatalogo service
+@inject ISnackbar Snackbar
+@inject IDialogService dialog
+
+
+
+@*
+    <MudPaper Elevation="9">
+        <MudTable FixedHeader="true" Items="catalogos" Hover="true">
+            <HeaderContent>
+                <MudTh>Foto</MudTh>
+                <MudTh>Marca</MudTh>
+                <MudTh>Nombre</MudTh>
+                <MudTh>Edición</MudTh>
+                <MudTh>Activo</MudTh>
+                <MudTh></MudTh>
+                <MudTh></MudTh>
+            </HeaderContent>
+            <RowTemplate>
+                <MudTd><img src="@context.foto" style="width:260px;height:210px; border-radius:50%;" /></MudTd>
+                <MudTd>@context.marca</MudTd>
+                <MudTd>@context.nombre</MudTd>
+                <MudTd>@context.edicion</MudTd>
+                <MudTd>
+                    @if (!context.activa)
+                    {
+                        <MudIcon Size="Size.Small" Icon="@Icons.Outlined.DisabledByDefault" Color="Color.Error"></MudIcon>
+                    }
+                    else
+                    {
+                        <MudIcon Size="Size.Small" Icon="@Icons.Outlined.Check" Color="Color.Success"></MudIcon>
+                    }
+                            </MudTd>
+                <MudTd>
+                    <MudFab Size="Size.Small" ButtonType="ButtonType.Button" Color="Color.Primary" Icon="@Icons.Material.Filled.Edit"></MudFab>
+                </MudTd>
+                <MudTd>
+                    <MudFab Size="Size.Small" ButtonType="ButtonType.Button" Color="Color.Primary" Icon="@Icons.Material.Filled.DeleteForever"></MudFab>
+                </MudTd>
+            </RowTemplate>
+        </MudTable>
+    </MudPaper>
+
+*@
+
+@*
+    <MatTable Items="@catalogos" Class="mat-elevation-z9" FilterByColumnName="marca">
+        <MatTableHeader>
+            <th>Foto</th>
+            <th>Marca</th>
+            <th>Nombre</th>
+            <th>Edición</th>
+            <th>Activa</th>
+            <th></th>
+            <th></th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td><img style="width:260px;height:215px;border-radius:50%;" src="@context.foto" /></td>
+            <td>@context.marca</td>
+            <td>@context.nombre</td>
+            <td>@context.edicion</td>
+            <td>@context.activa</td>
+            <td><MudFab ButtonType="ButtonType.Button" Link="/catalogo/create" Icon="@Icons.Filled.Edit" Color="Color.Primary"></MudFab></td>
+            <td><MudFab ButtonType="ButtonType.Button" Link="/catalogo/create" Icon="@Icons.Filled.Delete" Color="Color.Dark"></MudFab></td>
+        </MatTableRow>
+    </MatTable>
+*@
+
+
+    <div style="flex-wrap:wrap; margin-top:1rem;margin-bottom:1rem;">
+        <div class="card-group">
+            @foreach (var c in catalogos)
+            {
+                <div style="flex-basis:25%; max-width:25%">
+                    <div style="margin-right:5px;margin-bottom:5px;">
+                        <MatCard Class="mat-elevation-z9">
+                            <MatCardContent>
+                                <MatCardMedia Wide="true" ImageUrl="@c.foto"></MatCardMedia>
+                            </MatCardContent>
+                            <div style="margin:0 auto;">
+                                <MatBody2>
+                                    <MatSubtitle2>
+                                        @c.nombre
+                                    </MatSubtitle2>
+                                    <MatSubtitle2>
+                                        @c.marca
+                                    </MatSubtitle2>
+                                    <MatSubtitle2>
+                                        @c.edicion
+                                    </MatSubtitle2>
+                                    <MatIcon>
+                                        @if (!c.activa)
+                                        {
+                                            <MudIcon Size="Size.Small" Color="Color.Error" Icon="@Icons.Filled.DisabledByDefault"></MudIcon>
+                                        }
+                                        else
+                                        {
+                                            <MudIcon Size="Size.Small" Color="Color.Success" Icon="@Icons.Filled.Check"></MudIcon>
+                                        }
+                                    </MatIcon>
+                                    
+                                </MatBody2>
+                            </div>
+                            <MatCardActions>
+                                <MatCardActionIcons>
+                                    <div style="margin-bottom:4px;margin-right:4px;">
+                                        <MudFab Color="Color.Dark" Size="Size.Small"  Icon="@Icons.Filled.Edit" IconColor="Color.Warning"></MudFab>
+                                        <MudFab Color="Color.Warning" Size="Size.Small" Link="/catalogo/dropdown" Icon="@Icons.Filled.DeleteSweep" IconColor="Color.Dark"></MudFab>
+                                    </div>
+                                </MatCardActionIcons>
+                                <MatCardActionButtons>
+                                    <MudFab @onclick="openDialog" Color="Color.Warning" Size="Size.Small" Icon="@Icons.Material.Filled.Visibility"></MudFab>
+                                </MatCardActionButtons>
+                            </MatCardActions>
+                        </MatCard>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+
+
+
+
+@code {
+
+    IEnumerable<Catalogo> catalogos = new List<Catalogo>();
+    //HashSet<Catalogo> cata = new HashSet<Catalogo>();
+    
+
+    protected override async Task OnInitializedAsync()
+    {
+        catalogos = await service.getAll();
+    }
+
+    private void openDialog()
+    {
+        dialog.Show<ShowPhoto>("Ver foto");
+    }
+}

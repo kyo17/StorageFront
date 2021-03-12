@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "EpCN84tyCNLYe3JCuLAUfTw/8qQPkVb0IOJIKa/Qzhi9/g+ZvN9Nd+hZzOhNjHwAVeEW78o+JXYkJK1OXvQEsg==",
+  "success": true,
+  "projectFilePath": "/Users/jonathanespinoza/Desktop/StorageFront/Services/Services.csproj",
+  "expectedPackageFiles": [
+    "/Users/jonathanespinoza/.nuget/packages/newtonsoft.json/12.0.3/newtonsoft.json.12.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
